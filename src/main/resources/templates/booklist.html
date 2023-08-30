@@ -28,9 +28,8 @@
 			<td th:text="${book.publicationYear}"></td>
 			<td th:text="${book.isbn}"></td>
 			<td th:text="${book.price}"></td>
-			<!-- Add category -->
-			<td th:text="${book.category.name}"></td>
-			<!-- -->
+			<!-- Fix null category for now -->
+			<td th:text="${book.category != null ? book.category.name : 'N/A'}"></td>
 			<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${book.id})}">Edit</a>
 				<a class="btn btn-danger" th:href="@{/delete/{id}(id=${book.id})}"
 					onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
@@ -40,6 +39,7 @@
 	</table>
 
 	<a class="btn btn-success" th:href="@{/add}">Add New Book</a>
+	<a class="btn btn-success" th:href="@{/addcategory}">Add Category</a>
 </body>
 
 </html>

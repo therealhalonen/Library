@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
 
-    List<Book> findAllByTitle(String title);
+	List<Book> findAllByTitle(String title);
 
 }

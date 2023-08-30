@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Add darkness -->
+<html lang="en" data-bs-theme="dark">
+
+<head>
+	<meta charset="UTF-8">
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<title>Add Category</title>
+</head>
+
+<body>
+	<h1>Categories</h1>
+
+	<table class="table table-striped">
+		<tr>
+			<th>Category</th>
+			<th>Id</th>
+			<th>Actions</th>
+		</tr>
+		<tr th:each="category : ${categories}">
+			<td th:text="${category.name}"></td>
+			<td th:text="${category.categoryid}"></td>
+			<td>
+				<a class="btn btn-danger" th:href="@{/deletecategory/{id}(id=${category.categoryid})}"
+					onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+			</td>
+		</tr>
+	</table>
+	<form action="#" th:action="@{/savecategory}" th:object="${category}" method="post">
+		<label for="name">Add New:</label><br>
+		<input type="text" id="name" th:field="*{name}" required><br>
+		<button class="btn btn-success" type="submit">Save</button>
+	</form>
+	<a th:href="@{/booklist}">Back to Book List</a>
+</body>
+
+</html>

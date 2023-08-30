@@ -97,4 +97,9 @@ public class Book {
 		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", publicationYear=" + publicationYear
 				+ ", isbn=" + isbn + ", price=" + price + ", category=" + category + "]";
 	}
+
+	public Object getNewCategoryName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
