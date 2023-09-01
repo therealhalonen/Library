@@ -1,11 +1,15 @@
 package halonen.bookstore.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import halonen.bookstore.domain.Book;
 import halonen.bookstore.domain.BookRepository;
@@ -23,6 +27,7 @@ public class BookstoreController {
 	@RequestMapping(value = "/add")
 	public String addBook(Model model) {
 		model.addAttribute("book", new Book());
+		model.addAttribute("category", new Category());
 		model.addAttribute("categories", categoryRepository.findAll());
 		return "addbook";
 	}
@@ -73,9 +78,14 @@ public class BookstoreController {
 	}
 	
 	// Save Category
+	// Edited to handle page reload and stuffz thanks to Spring Boot, AJAX etc etc documentation.
 	@RequestMapping(value = "/savecategory", method = RequestMethod.POST)
-	public String saveCategort(Category category) {
-		categoryRepository.save(category);
-		return "redirect:addcategory";
+	public ResponseEntity<String> saveCategory(@RequestBody Category category) {
+	    try {
+	        categoryRepository.save(category);
+	        return ResponseEntity.ok("{\"success\": true}");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"success\": false}");
+	    }
 	}
 }

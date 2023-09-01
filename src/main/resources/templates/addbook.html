@@ -24,13 +24,24 @@
 		<label for="price">Price:</label><br>
 		<input type="number" id="price" th:field="*{price}" step="0.01" required><br>
 		<label for="category">Category:</label><br>
-		<select id="category" th:field="*{category}">
-			<option th:each="category : ${categories}" th:value="${category.categoryid}" th:text="${category.name}"></option>
+		<select onchange="location.reload()" id="category" th:field="*{category}">
+			<option th:each="category : ${categories}" th:value="${category.categoryid}" th:text="${category.name}">
+			</option>
+			<option value="NEW_CATEGORY">Add Category</option>
 		</select><br><br>
-
-		<button class="btn btn-success" type="submit">Save</button>
+		<button class="btn btn-success" type="submit">Save</button><br><br>
 	</form>
 
+	<form id="category-form" action="#" th:action="@{/savecategory}" th:object="${category}" method="post"
+		style="display: none">
+		<label for="name">Add Category:</label><br>
+		<input type="text" id="name" th:field="*{name}" required><br>
+		<button class="btn btn-success" type="submit">Save</button>
+	</form>
+	<!-- Execute JS, based on the selected value -->
+	<script src="/js/newCategory.js"></script>
+
+	<a href="javascript:history.back()">Go Back</a><br>
 	<a th:href="@{/booklist}">Back to Book List</a>
 </body>
 
