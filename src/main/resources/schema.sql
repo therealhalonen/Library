@@ -30,7 +30,9 @@ INSERT INTO category (name) VALUES ('Ugly');
 -- Add some Books
 INSERT INTO book (title, author, publication_year, isbn, price, categoryid)
 VALUES ('GoodBook', 'Me', 1985, '1234567890', 66.6, 2);
+INSERT INTO book (title, author, publication_year, isbn, price, categoryid)
 VALUES ('BadBook', 'Teacher', 2023, '0987654321', 6.66, 1);
+INSERT INTO book (title, author, publication_year, isbn, price, categoryid)
 VALUES ('UglyBook', 'SomeOne', 2024, '69', 666.0, 3);
 
 
