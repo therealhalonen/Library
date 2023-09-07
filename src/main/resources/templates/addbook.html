@@ -5,6 +5,11 @@
 
 <head>
 	<meta charset="UTF-8">
+	<!-- Passing the csrf stuff forward -->
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+	<!-- <script src="/js/categoryHandler.js"></script> -->
+	<script src="/js/newCategory.js"></script>
 	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 	<title>Add Book</title>
 </head>
@@ -24,22 +29,20 @@
 		<label for="price">Price:</label><br>
 		<input type="number" id="price" th:field="*{price}" step="0.01" required><br>
 		<label for="category">Category:</label><br>
-		<select onchange="location.reload()" id="category" th:field="*{category}">
+		<select id="category" th:field="*{category}" onchange="handleCategoryChange(this)">
 			<option th:each="category : ${categories}" th:value="${category.categoryid}" th:text="${category.name}">
 			</option>
 			<option value="NEW_CATEGORY">Add Category</option>
 		</select><br><br>
-		<button class="btn btn-success" type="submit">Save</button><br><br>
+		<button class="btn btn-success" type="submit">Save</button>
 	</form>
 
-	<form id="category-form" action="#" th:action="@{/savecategory}" th:object="${category}" method="post"
-		style="display: none">
+	<!-- Save Book - Finally working!!!! 3.9.2023-->
+	<form id="category-form" th:action="@{/savecategory}" th:object="${category}" method="post" style="display: none">
 		<label for="name">Add Category:</label><br>
 		<input type="text" id="name" th:field="*{name}" required><br>
 		<button class="btn btn-success" type="submit">Save</button>
 	</form>
-	<!-- Execute JS, based on the selected value -->
-	<script src="/js/newCategory.js"></script>
 
 	<a href="javascript:history.back()">Go Back</a><br>
 	<a th:href="@{/booklist}">Back to Book List</a>
