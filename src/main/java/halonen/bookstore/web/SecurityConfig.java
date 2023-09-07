@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 	@Autowired
 	private UserDetailService userDetailsService;
-	
+
     @Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
 			throws Exception {
@@ -38,7 +38,7 @@ public class SecurityConfig {
 						authorizeHttpRequests -> authorizeHttpRequests
 								.requestMatchers(
 										mvcMatcherBuilder.pattern("/css/**"),
-										mvcMatcherBuilder.pattern("/signup"), 
+										mvcMatcherBuilder.pattern("/signup"),
 										mvcMatcherBuilder.pattern("/saveuser"))
 								.permitAll()
 								.requestMatchers(
@@ -51,9 +51,9 @@ public class SecurityConfig {
 										mvcMatcherBuilder.pattern("/delete"),
 										mvcMatcherBuilder.pattern("/editbook"),
 										mvcMatcherBuilder.pattern("/savecategory"))
-								
+
 								.hasRole("ADMIN")
-								
+
 								.anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/booklist", true).permitAll())
 				.logout(logout -> logout.permitAll()).build();
@@ -78,6 +78,6 @@ public class SecurityConfig {
 	}
 	// Remove Role Prefix TODO, Doesnt work atm 07.09.2023
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        return new GrantedAuthorityDefaults(""); 
+        return new GrantedAuthorityDefaults("");
     }
-    }
+}

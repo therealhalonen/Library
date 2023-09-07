@@ -25,7 +25,7 @@ public class User {
 
     public User() {
     }
-    
+
 	public User(String username, String passwordHash, String role) {
 		super();
 		this.username = username;
@@ -64,5 +64,5 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-		 
+
 }

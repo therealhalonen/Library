@@ -21,9 +21,9 @@ public class Category {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
 	private List<Book> books;
-	
+
 	public Category() {}
-	
+
 	public Category(String name) {
 		super();
 		this.name = name;

@@ -22,7 +22,7 @@ public class Book {
 	@ManyToOne
     @JoinColumn(name = "categoryid")
     private Category category;
-	
+
 	public Book() {
 	}
 
@@ -83,7 +83,7 @@ public class Book {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public Category getCategory() {
 		return category;
 	}

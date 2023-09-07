@@ -4,16 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import halonen.bookstore.domain.Book;
@@ -32,13 +30,13 @@ public class BookstoreController {
 	private UserRepository userRepository;
 
 	// Login stuffz
-	@RequestMapping("/login")
+	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 
 	// Create Book
-	@RequestMapping(value = "/add")
+	@GetMapping(value = "/add")
 	public String addBook(Model model) {
 		model.addAttribute("book", new Book());
 		model.addAttribute("category", new Category());
@@ -47,7 +45,7 @@ public class BookstoreController {
 	}
 
 	// Create Category
-	@RequestMapping(value = "/addcategory")
+	@GetMapping(value = "/addcategory")
 	public String addCategory(Model model) {
 		model.addAttribute("category", new Category());
 		model.addAttribute("categories", categoryRepository.findAll());
@@ -55,7 +53,7 @@ public class BookstoreController {
 	}
 
 	// Read Books
-	@RequestMapping(value = { "/", "/booklist" })
+	@GetMapping(value = { "/", "/booklist" })
 	public String bookList(Model model) {
 		model.addAttribute("books", repository.findAll());
 		model.addAttribute("categories", categoryRepository.findAll());
@@ -65,7 +63,7 @@ public class BookstoreController {
 	}
 
 	// Update Book
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/edit/{id}")
 	public String editBook(@PathVariable("id") Long bookId, Model model) {
 		model.addAttribute("book", repository.findById(bookId));
 		model.addAttribute("categories", categoryRepository.findAll());
@@ -73,28 +71,28 @@ public class BookstoreController {
 	}
 
 	// Delete Book
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/delete/{id}")
 	public String deleteBook(@PathVariable("id") Long bookId, Model model) {
 		repository.deleteById(bookId);
 		return "redirect:../booklist";
 	}
 
 	// Delete Category
-	@RequestMapping(value = "/deletecategory/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/deletecategory/{id}")
 	public String deleteCategory(@PathVariable("id") Long categoryId) {
 		categoryRepository.deleteById(categoryId);
 		return "redirect:/addcategory";
 	}
 
 	// Save Book
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	@PostMapping(value = "/save")
 	public String saveBook(Book book) {
 		repository.save(book);
 		return "redirect:booklist";
 	}
 
 	// Save Book - Finally working!!!! 3.9.2023
-	@RequestMapping(value = "/savecategory", method = RequestMethod.POST, produces = "application/json")
+	@PostMapping(value = "/savecategory", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> saveCategory(@RequestBody Category category) {
 		try {

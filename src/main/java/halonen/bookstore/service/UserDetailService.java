@@ -1,10 +1,10 @@
 package halonen.bookstore.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.stereotype.Service;
 
 import halonen.bookstore.domain.User;
@@ -20,7 +20,7 @@ public class UserDetailService implements UserDetailsService  {
 	}
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {   
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     	User curruser = repository.findByUsername(username);
 
 		UserBuilder builder = null;
@@ -30,9 +30,9 @@ public class UserDetailService implements UserDetailsService  {
     	else {
 	    	builder = org.springframework.security.core.userdetails.User.withUsername(username);
 	    	builder.password(curruser.getPasswordHash());
-	    	builder.roles(curruser.getRole()); 
+	    	builder.roles(curruser.getRole());
     	}
-    	
+
 	    return builder.build();
     }
 
