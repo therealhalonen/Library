@@ -37,7 +37,7 @@ public class UserController {
 		    	User newUser = new User();
 		    	newUser.setPasswordHash(hashPwd);
 		    	newUser.setUsername(signupForm.getUsername());
-		    	newUser.setRole("USER");
+		    	newUser.setRole("TEMP");
 		    	if (repository.findByUsername(signupForm.getUsername()) == null) {
 		    		repository.save(newUser);
 		    	}

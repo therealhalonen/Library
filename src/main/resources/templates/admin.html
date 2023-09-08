@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Add darkness -->
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin Page</title>
+</head>
+
+<body>
+	<a class="btn btn-primary" th:if="${previousPage}" th:href="${previousPage}">Back</a>
+	<h1>Admin Page</h1>
+
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Username</th>
+				<th>Role</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Loop through the users from the model -->
+			<tr th:each="user : ${users}">
+				<td th:text="${user.id}"></td>
+				<td th:text="${user.username}"></td>
+				<td th:text="${user.role}"></td>
+				<td>
+					<form th:action="@{/admin/update-role}" method="post">
+						<input type="hidden" name="userId" th:value="${user.id}" />
+						<select name="newRole">
+							<option value="USER" th:selected="${user.role == 'USER'}">User</option>
+							<option value="ADMIN" th:selected="${user.role == 'ADMIN'}">Admin</option>
+							<option value="TEMP" th:selected="${user.role == 'TEMP'}">Temp</option>
+						</select>
+						<button type="submit" class="btn btn-primary">Update Role</button>
+					</form>
+					<form th:action="@{/admin/delete-user}" method="post">
+						<input type="hidden" name="userId" th:value="${user.id}" />
+						<button type="submit" class="btn btn-danger">Delete User</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+</html>

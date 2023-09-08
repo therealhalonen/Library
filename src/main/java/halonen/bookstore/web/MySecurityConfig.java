@@ -25,10 +25,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 @ComponentScan("halonen.bookstore")
-public class SecurityConfig {
+public class MySecurityConfig {
 	@Autowired
 	private UserDetailService userDetailsService;
-
+	
+	 @Autowired
+	    private MyAuthenticationSuccessHandler authenticationSuccessHandler;
     @Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
 			throws Exception {
@@ -51,13 +53,21 @@ public class SecurityConfig {
 										mvcMatcherBuilder.pattern("/delete"),
 										mvcMatcherBuilder.pattern("/editbook"),
 										mvcMatcherBuilder.pattern("/savecategory"))
-
 								.hasRole("ADMIN")
-
-								.anyRequest().authenticated())
-				.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/booklist", true).permitAll())
-				.logout(logout -> logout.permitAll()).build();
-	}
+								.requestMatchers(
+										mvcMatcherBuilder.pattern("/approval"))
+								.hasRole("TEMP")
+		
+		                        .anyRequest().authenticated()
+		                )
+		                .formLogin(form -> form
+		                        .loginPage("/login")
+		                        .successHandler(authenticationSuccessHandler) // Use custom success handler
+		                        .permitAll()
+		                )
+		                .logout(logout -> logout.permitAll())
+		                .build();
+		    }
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

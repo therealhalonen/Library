@@ -1,9 +1,11 @@
 package halonen.bookstore.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import halonen.bookstore.domain.Book;
@@ -23,7 +26,7 @@ import halonen.bookstore.domain.UserRepository;
 @Controller
 public class BookstoreController {
 	@Autowired
-	private BookRepository repository;
+	private BookRepository bookRepository;
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@Autowired
@@ -33,6 +36,12 @@ public class BookstoreController {
 	@GetMapping("/login")
 	public String login() {
 		return "login";
+	}
+
+	@GetMapping("/approval")
+	public String approvalPage() {
+		// Logic to prepare data or perform actions related to the approval page
+		return "approval"; // Return the Thymeleaf template or view name for the approval page
 	}
 
 	// Create Book
@@ -53,19 +62,40 @@ public class BookstoreController {
 	}
 
 	// Read Books
+	/*
+	 * @GetMapping(value = { "/", "/booklist" }) public String bookList(Model model)
+	 * { model.addAttribute("books", repository.findAll());
+	 * model.addAttribute("categories", categoryRepository.findAll()); Model user =
+	 * model.addAttribute("user", userRepository.findAll());
+	 * System.out.println(user.toString()); return "booklist"; }
+	 */
+
 	@GetMapping(value = { "/", "/booklist" })
-	public String bookList(Model model) {
-		model.addAttribute("books", repository.findAll());
+	public String bookList(Model model, @RequestParam(value = "sortField", defaultValue = "title") String sortField,
+			@RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
+		// Get books based on sorting criteria and direction
+		Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+		Sort sort = Sort.by(direction, sortField);
+
+		List<Book> books = bookRepository.findAll(sort);
+
+		model.addAttribute("books", books);
 		model.addAttribute("categories", categoryRepository.findAll());
-		Model user = model.addAttribute("user", userRepository.findAll());
-		System.out.println(user.toString());
+		model.addAttribute("user", userRepository.findAll());
+
 		return "booklist";
+	}
+
+	@GetMapping("/booklist/sort")
+	public String sortBooks(@RequestParam("field") String field, @RequestParam("direction") String direction) {
+		// Redirect to the /booklist page with sorting parameters
+		return "redirect:/booklist?sortField=" + field + "&sortDirection=" + direction;
 	}
 
 	// Update Book
 	@GetMapping(value = "/edit/{id}")
 	public String editBook(@PathVariable("id") Long bookId, Model model) {
-		model.addAttribute("book", repository.findById(bookId));
+		model.addAttribute("book", bookRepository.findById(bookId));
 		model.addAttribute("categories", categoryRepository.findAll());
 		return "editbook";
 	}
@@ -73,7 +103,7 @@ public class BookstoreController {
 	// Delete Book
 	@GetMapping(value = "/delete/{id}")
 	public String deleteBook(@PathVariable("id") Long bookId, Model model) {
-		repository.deleteById(bookId);
+		bookRepository.deleteById(bookId);
 		return "redirect:../booklist";
 	}
 
@@ -87,7 +117,7 @@ public class BookstoreController {
 	// Save Book
 	@PostMapping(value = "/save")
 	public String saveBook(Book book) {
-		repository.save(book);
+		bookRepository.save(book);
 		return "redirect:booklist";
 	}
 
