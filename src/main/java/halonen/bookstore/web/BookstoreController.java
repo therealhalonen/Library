@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,6 +102,7 @@ public class BookstoreController {
 	}
 
 	// Delete Book
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/delete/{id}")
 	public String deleteBook(@PathVariable("id") Long bookId, Model model) {
 		bookRepository.deleteById(bookId);
@@ -108,6 +110,7 @@ public class BookstoreController {
 	}
 
 	// Delete Category
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/deletecategory/{id}")
 	public String deleteCategory(@PathVariable("id") Long categoryId) {
 		categoryRepository.deleteById(categoryId);
@@ -120,8 +123,14 @@ public class BookstoreController {
 		bookRepository.save(book);
 		return "redirect:booklist";
 	}
-
-	// Save Book - Finally working!!!! 3.9.2023
+	
+	// Save Book Simple
+	@PostMapping(value = "/savecategorysimple")
+	public String saveCategorySimple(Category category) {
+		categoryRepository.save(category);
+		return "redirect:addcategory";
+	}
+	// Save Category - Complicated Finally working!!!! 3.9.2023
 	@PostMapping(value = "/savecategory", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> saveCategory(@RequestBody Category category) {

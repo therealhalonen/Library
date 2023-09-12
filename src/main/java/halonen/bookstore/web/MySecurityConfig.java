@@ -1,10 +1,11 @@
 package halonen.bookstore.web;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -12,11 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import halonen.bookstore.service.UserDetailService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,50 +24,58 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("halonen.bookstore")
+@EnableMethodSecurity(securedEnabled = true)
 public class MySecurityConfig {
-	@Autowired
-	private UserDetailService userDetailsService;
-	
-	 @Autowired
-	    private MyAuthenticationSuccessHandler authenticationSuccessHandler;
+    @Autowired
+    private UserDetailService userDetailsService;
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
     @Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
-			throws Exception {
-		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
-		return http
-				.authorizeHttpRequests(
-						authorizeHttpRequests -> authorizeHttpRequests
-								.requestMatchers(
-										mvcMatcherBuilder.pattern("/css/**"),
-										mvcMatcherBuilder.pattern("/signup"),
-										mvcMatcherBuilder.pattern("/saveuser"))
-								.permitAll()
-								.requestMatchers(
-										mvcMatcherBuilder.pattern("/booklist"))
-								.hasAnyRole("USER", "ADMIN")
-								.requestMatchers(
-										mvcMatcherBuilder.pattern("/js/*"),
-										mvcMatcherBuilder.pattern("/add"),
-										mvcMatcherBuilder.pattern("/addcategory"),
-										mvcMatcherBuilder.pattern("/delete"),
-										mvcMatcherBuilder.pattern("/editbook"),
-										mvcMatcherBuilder.pattern("/savecategory"))
-								.hasRole("ADMIN")
-								.requestMatchers(
-										mvcMatcherBuilder.pattern("/approval"))
-								.hasRole("TEMP")
-		
-		                        .anyRequest().authenticated()
-		                )
-		                .formLogin(form -> form
-		                        .loginPage("/login")
-		                        .successHandler(authenticationSuccessHandler) // Use custom success handler
-		                        .permitAll()
-		                )
-		                .logout(logout -> logout.permitAll())
-		                .build();
-		    }
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authorize -> authorize
+            		
+            		.requestMatchers(
+            				antMatcher("/css/**"),
+            				antMatcher("/login"),
+            				antMatcher("/signup"),
+            				antMatcher("/saveuser"))
+            		.permitAll()
+            		// Users and Admins
+            		.requestMatchers(
+            				antMatcher("/booklist"))
+            		.hasAnyRole("USER", "ADMIN")
+            		// Admin only
+            		.requestMatchers(
+            				antMatcher("/js/**"),
+            				antMatcher("/api/**"),
+            				antMatcher("/add"),
+            				antMatcher("/addcategory"),
+            				antMatcher("/delete/**"),
+            				antMatcher("/editbook"),
+            				antMatcher("/savecategory"),
+            				antMatcher("/deletecategory/**"))
+            		.hasRole("ADMIN")
+            		// Temp user
+            		.requestMatchers(
+            				antMatcher("/approval"))
+            		.hasRole("TEMP")
+            		.anyRequest().authenticated()
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.disable()) // for h2console
+            )
+            .formLogin(formLogin -> formLogin
+                .loginPage("/login")
+                .successHandler(authenticationSuccessHandler) // Use custom success handler
+                .permitAll()
+            )
+            .logout(logout -> logout.permitAll());
+
+        return http.build();
+    }
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
