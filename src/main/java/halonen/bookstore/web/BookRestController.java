@@ -8,12 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import halonen.bookstore.domain.Book;
 import halonen.bookstore.domain.BookRepository;
 
 @RestController
+@RequestMapping("/api")
 public class BookRestController {
 	@Autowired
 	private BookRepository repository;
@@ -28,7 +30,7 @@ public class BookRestController {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-	@GetMapping("/{id}")
+	@GetMapping("/allbooks/{id}")
 	public ResponseEntity<Book> getBookById(@PathVariable("id") Long bookId) {
 	    try {
 	        Optional<Book> bookOptional = repository.findById(bookId);

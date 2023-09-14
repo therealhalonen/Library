@@ -98,8 +98,4 @@ public class Book {
 				+ ", isbn=" + isbn + ", price=" + price + ", category=" + category + "]";
 	}
 
-	public Object getNewCategoryName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

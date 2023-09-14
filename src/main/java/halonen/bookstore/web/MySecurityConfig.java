@@ -35,9 +35,12 @@ public class MySecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        // .httpBasic() // Allows authentication with "-u login:pass"
+        // .and()
+        // .csrf().disable() // Obviously does what it says... So far only way to allow -X DELETE
             .authorizeHttpRequests(authorize -> authorize
-            		
             		.requestMatchers(
+            				// antMatcher("/api/**"), // Temporarily allow anyone to use api
             				antMatcher("/css/**"),
             				antMatcher("/login"),
             				antMatcher("/signup"),
