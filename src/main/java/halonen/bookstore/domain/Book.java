@@ -1,11 +1,15 @@
 package halonen.bookstore.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Book {
@@ -13,13 +17,22 @@ public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name= "title")
 	private String title;
+	@Column(name= "author")
 	private String author;
+	
+	@Column(name= "publicationYear")
+	@Min(value = 1000, message="min value is 1000")
+	@Max(value = 2023, message="cant be in the future!")
 	private int publicationYear;
+	@Column(name= "isbn")
 	private String isbn;
+	@Column(name= "price")
 	private double price;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryid")
     private Category category;
 

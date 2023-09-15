@@ -19,7 +19,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
             // If the user has the TEMP role, redirect to /approval
             response.sendRedirect("/approval");
         } else {
-            // Otherwise, redirect to the default page (e.g., /booklist)
+            // Otherwise, redirect to the default page
             response.sendRedirect("/booklist");
         }
     }

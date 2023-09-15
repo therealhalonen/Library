@@ -41,7 +41,6 @@ public class BookstoreController {
 
 	@GetMapping("/approval")
 	public String approvalPage() {
-		// Logic to prepare data or perform actions related to the approval page
 		return "approval"; // Return the Thymeleaf template or view name for the approval page
 	}
 
@@ -124,7 +123,7 @@ public class BookstoreController {
 		return "redirect:booklist";
 	}
 	
-	// Save Book Simple
+	// Save Category Simple
 	@PostMapping(value = "/savecategorysimple")
 	public String saveCategorySimple(Category category) {
 		categoryRepository.save(category);
