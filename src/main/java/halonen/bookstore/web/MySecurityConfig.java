@@ -4,6 +4,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,14 +34,25 @@ public class MySecurityConfig {
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
+    @Order(1)
+    SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(auth -> {
+                    auth.anyRequest().authenticated();
+                })
+                .httpBasic()
+                .and()
+                .csrf().disable()
+                .build();
+    }
+    
+    @Bean
+    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        // .httpBasic() // Allows authentication with "-u login:pass"
-        // .and()
-        // .csrf().disable() // Obviously does what it says... So far only way to allow -X DELETE
             .authorizeHttpRequests(authorize -> authorize
             		.requestMatchers(
-            				// antMatcher("/api/**"), // Temporarily allow anyone to use api
             				antMatcher("/css/**"),
             				antMatcher("/login"),
             				antMatcher("/signup"),
@@ -53,7 +65,6 @@ public class MySecurityConfig {
             		// Admin only
             		.requestMatchers(
             				antMatcher("/js/**"),
-            				antMatcher("/api/**"),
             				antMatcher("/add"),
             				antMatcher("/addcategory"),
             				antMatcher("/delete/**"),
@@ -66,6 +77,7 @@ public class MySecurityConfig {
             				antMatcher("/approval"))
             		.hasRole("TEMP")
             		.anyRequest().authenticated()
+
             )
             .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.disable()) // for h2console
