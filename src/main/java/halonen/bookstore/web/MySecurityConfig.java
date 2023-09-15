@@ -39,7 +39,7 @@ public class MySecurityConfig {
         return http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().hasRole("ADMIN");;
                 })
                 .httpBasic()
                 .and()
