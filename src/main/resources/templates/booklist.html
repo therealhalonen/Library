@@ -46,7 +46,7 @@
 	</form>
 
 	<!-- Check if the user has roles USER or ADMIN -->
-	<table class="table table-striped" sec:authorize="hasAnyRole('ADMIN', 'USER')" >
+	<table class="table table-striped" sec:authorize="hasAnyRole('ADMIN', 'USER')">
 
 		<tr>
 			<th>Title</th>
@@ -75,10 +75,12 @@
 			</td>
 			<td>
 				<div class="btn-group">
-					<form sec:authorize="hasRole('ADMIN')" th:action="@{/edit/{id}(id=${book.id})}" method="get">
+					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+						th:action="@{/edit/{id}(id=${book.id})}" method="get">
 						<button type="submit" class="btn btn-success">Edit</button>
 					</form>
-					<form sec:authorize="hasRole('ADMIN')" th:action="@{/delete/{id}(id=${book.id})}" method="get"
+					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+						th:action="@{/delete/{id}(id=${book.id})}" method="get"
 						onsubmit="return confirm('Are you sure you want to delete this book?');">
 						<button type="submit" class="btn btn-danger">Delete</button>
 					</form>
@@ -88,6 +90,11 @@
 					<form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
 						<button type="submit" class="btn btn-primary"
 							th:if="${book.loan != null && book.loan.user.username == #authentication.name}">Return</button>
+					</form>
+					<!-- Admin can mark the book as returned -->
+					<form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
+						<button type="submit" class="btn btn-primary"
+							th:if="${book.loan != null && book.loan.user.username != #authentication.name}">Mark as Returned</button>
 					</form>
 				</div>
 			</td>

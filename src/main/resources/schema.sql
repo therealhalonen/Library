@@ -61,3 +61,4 @@ VALUES (3, 'UglyBook', 'SomeOne', 2024, '69', 666.0, 3);
 
 -- Add the Admin user
 INSERT INTO users (username, password, role) VALUES ('admin', '$2b$10$o0liCdP9lzTgCHarj9JCdeoyWICDjRpQCYS4TP97jSnRc5tlriKPS', 'ADMIN');
+INSERT INTO users (username, password, role) VALUES ('admin2', '$2b$10$o0liCdP9lzTgCHarj9JCdeoyWICDjRpQCYS4TP97jSnRc5tlriKPS', 'ADMIN');

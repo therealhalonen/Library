@@ -59,7 +59,7 @@ public class LoanController {
 
         if (book != null && user != null) {
             // Check if the book is loaned by the current user
-            if (book.getStatus() == LoanStatus.LOANED && book.getLoan().getUser().getUsername().equals(user.getUsername())) {
+            // if (book.getStatus() == LoanStatus.LOANED && book.getLoan().getUser().getUsername().equals(user.getUsername())) {
 
                 Loan loan = book.getLoan();
                 
@@ -67,7 +67,7 @@ public class LoanController {
                 book.setStatus(LoanStatus.AVAILABLE);
                 bookRepository.save(book);
                 loanRepository.delete(loan);
-            }
+            // }
         }
 
         return "redirect:/booklist";
