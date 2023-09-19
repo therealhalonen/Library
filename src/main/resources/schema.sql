@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS category_seq;
 DROP TABLE IF EXISTS book;
 DROP TABLE IF EXISTS book_seq;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS loan;
 SET FOREIGN_KEY_CHECKS=1;
 
 -- Add sequences
@@ -26,6 +26,7 @@ CREATE TABLE book (
     isbn VARCHAR(255),
     price DECIMAL(10, 2),
     categoryid INT,
+    status VARCHAR(255) DEFAULT 'AVAILABLE',
     FOREIGN KEY (categoryid) REFERENCES category(categoryid)
 );
 
@@ -42,6 +43,14 @@ INSERT INTO category (name) VALUES ('Bad');
 INSERT INTO category (name) VALUES ('Good');
 INSERT INTO category (name) VALUES ('Ugly');
 
+-- Add Loan table
+CREATE TABLE loan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT,
+    bookid INT,
+    FOREIGN KEY (userid) REFERENCES users(id),
+    FOREIGN KEY (bookid) REFERENCES book(id)
+);
 -- Add some Books
 INSERT INTO book (id, title, author, publication_year, isbn, price, categoryid)
 VALUES (1, 'GoodBook', 'Me', 1985, '1234567890', 66.6, 2);

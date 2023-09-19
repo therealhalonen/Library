@@ -6,7 +6,7 @@ function handleCategoryChange(selectElement) {
     // Get a reference to the "category-form" element
     var categoryForm = document.getElementById("category-form");
 
-    if (selectedValue === "NEW_CATEGORY") {
+    if (selectedValue === "0") {
         // Show the category form
         categoryForm.style.display = "block";
     } else {

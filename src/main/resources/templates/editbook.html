@@ -19,7 +19,8 @@
 		<label for="author">Author:</label><br>
 		<input type="text" id="author" th:field="*{author}" required><br>
 		<label for="publicationYear">Publication Year:</label><br>
-		<input type="number" id="publicationYear" th:field="*{publicationYear}" required><br>
+		<input type="number" id="publicationYear" th:field="*{publicationYear}">
+		<span th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}"></span><br>
 		<label for="isbn">ISBN:</label><br>
 		<input type="text" id="isbn" th:field="*{isbn}" required><br>
 		<label for="price">Price:</label><br>

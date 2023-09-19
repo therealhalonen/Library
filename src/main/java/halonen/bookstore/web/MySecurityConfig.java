@@ -60,6 +60,7 @@ public class MySecurityConfig {
             		.permitAll()
             		// Users and Admins
             		.requestMatchers(
+            				antMatcher("/loan/**"),
             				antMatcher("/booklist"))
             		.hasAnyRole("USER", "ADMIN")
             		// Admin only

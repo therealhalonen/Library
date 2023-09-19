@@ -1,5 +1,6 @@
 package halonen.bookstore.web;
 
+import java.lang.annotation.Repeatable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,11 @@ import halonen.bookstore.domain.Book;
 import halonen.bookstore.domain.BookRepository;
 import halonen.bookstore.domain.Category;
 import halonen.bookstore.domain.CategoryRepository;
+import halonen.bookstore.domain.Loan;
+import halonen.bookstore.domain.LoanRepository;
 import halonen.bookstore.domain.UserRepository;
+import halonen.bookstore.service.LoanStatus;
+import jakarta.validation.Valid;
 
 @Controller
 public class BookstoreController {
@@ -32,7 +39,9 @@ public class BookstoreController {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private UserRepository userRepository;
-
+	@Autowired
+	private LoanRepository loanRepository;
+	
 	// Login stuffz
 	@GetMapping("/login")
 	public String login() {
@@ -61,29 +70,31 @@ public class BookstoreController {
 		return "addcategory";
 	}
 
-	// Read Books
-	/*
-	 * @GetMapping(value = { "/", "/booklist" }) public String bookList(Model model)
-	 * { model.addAttribute("books", repository.findAll());
-	 * model.addAttribute("categories", categoryRepository.findAll()); Model user =
-	 * model.addAttribute("user", userRepository.findAll());
-	 * System.out.println(user.toString()); return "booklist"; }
-	 */
-
 	@GetMapping(value = { "/", "/booklist" })
 	public String bookList(Model model, @RequestParam(value = "sortField", defaultValue = "title") String sortField,
-			@RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
-		// Get books based on sorting criteria and direction
-		Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-		Sort sort = Sort.by(direction, sortField);
+	        @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
+	    // Get books based on sorting criteria and direction
+	    Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+	    Sort sort = Sort.by(direction, sortField);
 
-		List<Book> books = bookRepository.findAll(sort);
+	    List<Book> books = bookRepository.findAll(sort);
 
-		model.addAttribute("books", books);
-		model.addAttribute("categories", categoryRepository.findAll());
-		model.addAttribute("user", userRepository.findAll());
+	    for (Book book : books) {
+	        Loan loan = loanRepository.findByBook(book);
+	        if (loan != null) {
+	            // If a loan exists, set the status to LOANED
+	            book.setStatus(LoanStatus.LOANED);
+	        } else {
+	            // If no loan exists, set the status to AVAILABLE
+	            book.setStatus(LoanStatus.AVAILABLE);
+	        }
+	    }
 
-		return "booklist";
+	    model.addAttribute("books", books);
+	    model.addAttribute("categories", categoryRepository.findAll());
+	    model.addAttribute("user", userRepository.findAll());
+
+	    return "booklist";
 	}
 
 	@GetMapping("/booklist/sort")
@@ -118,11 +129,18 @@ public class BookstoreController {
 
 	// Save Book
 	@PostMapping(value = "/save")
-	public String saveBook(Book book) {
-		bookRepository.save(book);
-		return "redirect:booklist";
+	public String saveBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, Model model) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("category", new Category());
+		    model.addAttribute("book", book);
+		    model.addAttribute("categories", categoryRepository.findAll());
+		    return "addbook";
+	    } else {
+	        bookRepository.save(book);
+	        return "redirect:/booklist";
+	    }
 	}
-	
 	// Save Category Simple
 	@PostMapping(value = "/savecategorysimple")
 	public String saveCategorySimple(Category category) {
@@ -144,7 +162,7 @@ public class BookstoreController {
 
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			// Handle any exceptions that occur during the save operation
+			// Handles any exceptions that occur during the save operation
 			Map<String, Object> errorResponse = new HashMap<>();
 			errorResponse.put("success", false);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);

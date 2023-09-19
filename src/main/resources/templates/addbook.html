@@ -21,7 +21,8 @@
 		<label for="author">Author:</label><br>
 		<input type="text" id="author" th:field="*{author}" required><br>
 		<label for="publicationYear">Publication Year:</label><br>
-		<input type="number" id="publicationYear" th:field="*{publicationYear}" required><br>
+		<input type="number" id="publicationYear" required name="publicationYear" value="0">
+		<span th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}"></span>
 		<label for="isbn">ISBN:</label><br>
 		<input type="text" id="isbn" th:field="*{isbn}" required><br>
 		<label for="price">Price:</label><br>
@@ -30,12 +31,12 @@
 		<select id="category" th:field="*{category}" onchange="handleCategoryChange(this)">
 			<option th:each="category : ${categories}" th:value="${category.categoryid}" th:text="${category.name}">
 			</option>
-			<option value="NEW_CATEGORY">Add Category</option>
+			<option value="0">Add Category</option>
 		</select><br><br>
 		<button class="btn btn-success" type="submit">Save</button>
 	</form>
 
-	<!-- Save Book - Finally working!!!! 3.9.2023-->
+	<!-- Save Category the complicated way -thing -->
 	<form id="category-form" th:action="@{/savecategory}" th:object="${category}" method="post" style="display: none">
 		<label for="name">Add Category:</label><br>
 		<input type="text" id="name" th:field="*{name}" required><br>

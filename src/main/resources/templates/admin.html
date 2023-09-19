@@ -14,21 +14,18 @@
 	<h1>Admin Page</h1>
 
 	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Username</th>
-				<th>Role</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- Loop through the users from the model -->
-			<tr th:each="user : ${users}">
-				<td th:text="${user.id}"></td>
-				<td th:text="${user.username}"></td>
-				<td th:text="${user.role}"></td>
-				<td>
+		<tr>
+			<th>ID</th>
+			<th>Username</th>
+			<th>Role</th>
+			<th>Edit</th>
+		</tr>
+		<tr th:each="user : ${users}">
+			<td th:text="${user.id}"></td>
+			<td th:text="${user.username}"></td>
+			<td th:text="${user.role}"></td>
+			<td>
+				<div class="btn-group">
 					<form th:action="@{/admin/update-role}" method="post">
 						<input type="hidden" name="userId" th:value="${user.id}" />
 						<select name="newRole">
@@ -42,10 +39,15 @@
 						<input type="hidden" name="userId" th:value="${user.id}" />
 						<button type="submit" class="btn btn-danger">Delete User</button>
 					</form>
-				</td>
-			</tr>
-		</tbody>
+				</div>
+			</td>
+
+		</tr>
 	</table>
+
+	<a href="javascript:history.back()">Go Back</a><br>
+	<a th:href="@{/booklist}">Back to Book List</a><br><br>
+	<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
 </body>
 
 </html>

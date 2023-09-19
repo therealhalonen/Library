@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,7 +43,6 @@ public class Category {
 	}
 
 	public void setBooks(List<Book> books) {
-		books.forEach(book -> book.setCategory(this));
 		this.books = books;
 	}
 
