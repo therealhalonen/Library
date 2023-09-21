@@ -1,13 +1,12 @@
 package halonen.bookstore;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import halonen.bookstore.domain.Category;
+import halonen.bookstore.domain.CategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import halonen.bookstore.domain.Category;
-import halonen.bookstore.domain.CategoryRepository;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 public class CategoryRepositoryTests {

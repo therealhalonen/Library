@@ -1,6 +1,8 @@
 package halonen.bookstore.web;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+import halonen.bookstore.service.UserDetailService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +21,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import halonen.bookstore.service.UserDetailService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +34,7 @@ public class MySecurityConfig {
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @SuppressWarnings("removal")
-	@Bean
+    @Bean
     @Order(1)
     SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -52,66 +52,67 @@ public class MySecurityConfig {
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-            		.requestMatchers(
-            				antMatcher("/css/**"),
-            				antMatcher("/login"),
-            				antMatcher("/signup"),
-            				antMatcher("/saveuser"))
-            		.permitAll()
-            		// Users and Admins
-            		.requestMatchers(
-            				antMatcher("/loan/**"),
-            				antMatcher("/booklist"))
-            		.hasAnyRole("USER", "ADMIN")
-            		// Admin only
-            		.requestMatchers(
-            				antMatcher("/js/**"),
-            				antMatcher("/add"),
-            				antMatcher("/addcategory"),
-            				antMatcher("/delete/**"),
-            				antMatcher("/editbook"),
-            				antMatcher("/savecategory"),
-            				antMatcher("/deletecategory/**"))
-            		.hasRole("ADMIN")
-            		// Temp user
-            		.requestMatchers(
-            				antMatcher("/approval"))
-            		.hasRole("TEMP")
-            		.anyRequest().authenticated()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                antMatcher("/css/**"),
+                                antMatcher("/login"),
+                                antMatcher("/signup"),
+                                antMatcher("/saveuser"))
+                        .permitAll()
+                        // Users and Admins
+                        .requestMatchers(
+                                antMatcher("/loan/**"),
+                                antMatcher("/booklist"))
+                        .hasAnyRole("USER", "ADMIN")
+                        // Admin only
+                        .requestMatchers(
+                                antMatcher("/js/**"),
+                                antMatcher("/add"),
+                                antMatcher("/addcategory"),
+                                antMatcher("/delete/**"),
+                                antMatcher("/edit/**"),
+                                antMatcher("/savecategory"),
+                                antMatcher("/deletecategory/**"))
+                        .hasRole("ADMIN")
+                        // Temp user
+                        .requestMatchers(
+                                antMatcher("/approval"))
+                        .hasRole("TEMP")
+                        .anyRequest().authenticated()
 
-            )
-            .headers(headers -> headers
-                .frameOptions(frameOptions -> frameOptions.disable()) // for h2console
-            )
-            .formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .successHandler(authenticationSuccessHandler) // Use custom success handler
-                .permitAll()
-            )
-            .logout(logout -> logout.permitAll());
+                )
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.disable()) // for h2console
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .successHandler(authenticationSuccessHandler) // Use custom success handler
+                        .permitAll()
+                )
+                .logout(logout -> logout.permitAll());
 
         return http.build();
     }
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-	}
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+    }
 
-	@Controller
-	public class LogoutController {
+    @Controller
+    public class LogoutController {
 
-		@GetMapping("/custom-logout")
-		public String logout(HttpServletRequest request, HttpServletResponse response) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null) {
-				new SecurityContextLogoutHandler().logout(request, response, auth);
-			}
-			return "redirect:/login?logout"; // Redirect to the login page after logout
-		}
-	}
-	// Remove Role Prefix TODO, Doesnt work atm 07.09.2023
+        @GetMapping("/custom-logout")
+        public String logout(HttpServletRequest request, HttpServletResponse response) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }
+            return "redirect:/login?logout"; // Redirect to the login page after logout
+        }
+    }
+
+    // Remove Role Prefix TODO, Doesnt work atm 07.09.2023
     public GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults("");
     }

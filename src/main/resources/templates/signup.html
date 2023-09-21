@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" lang="en"
-	data-bs-theme="dark">
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      data-bs-theme="dark">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
-	<title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <title>Register</title>
 </head>
 
 <body>
-	<div class="container">
-		<h1>Sign-up</h1>
-		<form th:object="${signupform}" th:action="@{/saveuser}" action="#" method="post">
-			<input type="text" th:field="*{username}" class="form-control" placeholder="Username" />
-			<p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</p>
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="password" th:field="*{password}" class="form-control" placeholder="Password" />
-			<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</p>
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="password" th:field="*{passwordCheck}" class="form-control" placeholder="Re-enter Password" />
-			<p th:if="${#fields.hasErrors('passwordCheck')}" th:errors="*{passwordCheck}">Password Match Error</p>
+<div class="container">
+    <h1>Sign-up</h1>
+    <form th:object="${signupform}" th:action="@{/saveuser}" action="#" method="post">
+        <input type="text" th:field="*{username}" class="form-control" placeholder="Username"/>
+        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</p>
+        <div style="clear: both; display: block; height: 10px;"></div>
+        <input type="password" th:field="*{password}" class="form-control" placeholder="Password"/>
+        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</p>
+        <div style="clear: both; display: block; height: 10px;"></div>
+        <input type="password" th:field="*{passwordCheck}" class="form-control" placeholder="Re-enter Password"/>
+        <p th:if="${#fields.hasErrors('passwordCheck')}" th:errors="*{passwordCheck}">Password Match Error</p>
 
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<input type="submit" class="btn btn-primary" value="Save"></input>
-		</form>
-	</div>
+        <div style="clear: both; display: block; height: 10px;"></div>
+        <input type="submit" class="btn btn-primary" value="Save"></input>
+    </form>
+</div>
 </body>
 
 </html>

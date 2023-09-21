@@ -1,53 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" lang="en"
-	data-bs-theme="dark">
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      data-bs-theme="dark">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
-	<title>Admin Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <title>Admin Page</title>
 </head>
 
 <body>
-	<a class="btn btn-primary" th:if="${previousPage}" th:href="${previousPage}">Back</a>
-	<h1>Admin Page</h1>
+<a class="btn btn-primary" th:if="${previousPage}" th:href="${previousPage}">Back</a>
+<h1>Admin Page</h1>
 
-	<table class="table table-striped">
-		<tr>
-			<th>ID</th>
-			<th>Username</th>
-			<th>Role</th>
-			<th>Edit</th>
-		</tr>
-		<tr th:each="user : ${users}">
-			<td th:text="${user.id}"></td>
-			<td th:text="${user.username}"></td>
-			<td th:text="${user.role}"></td>
-			<td>
-				<div class="btn-group">
-					<form th:action="@{/admin/update-role}" method="post">
-						<input type="hidden" name="userId" th:value="${user.id}" />
-						<select name="newRole">
-							<option value="USER" th:selected="${user.role == 'USER'}">User</option>
-							<option value="ADMIN" th:selected="${user.role == 'ADMIN'}">Admin</option>
-							<option value="TEMP" th:selected="${user.role == 'TEMP'}">Temp</option>
-						</select>
-						<button type="submit" class="btn btn-primary">Update Role</button>
-					</form>
-					<form th:action="@{/admin/delete-user}" method="post">
-						<input type="hidden" name="userId" th:value="${user.id}" />
-						<button type="submit" class="btn btn-danger">Delete User</button>
-					</form>
-				</div>
-			</td>
+<table class="table table-striped">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Edit</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <div class="btn-group">
+                <form th:action="@{/admin/update-role}" method="post">
+                    <input type="hidden" name="userId" th:value="${user.id}"/>
+                    <select name="newRole">
+                        <option value="USER" th:selected="${user.role == 'USER'}">User</option>
+                        <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">Admin</option>
+                        <option value="TEMP" th:selected="${user.role == 'TEMP'}">Temp</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Update Role</button>
+                </form>
+                <form th:action="@{/admin/delete-user}" method="post">
+                    <input type="hidden" name="userId" th:value="${user.id}"/>
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </td>
 
-		</tr>
-	</table>
+    </tr>
+</table>
 
-	<a href="javascript:history.back()">Go Back</a><br>
-	<a th:href="@{/booklist}">Back to Book List</a><br><br>
-	<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
+<a href="javascript:history.back()">Go Back</a><br>
+<a th:href="@{/booklist}">Back to Book List</a><br><br>
+<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
 </body>
 
 </html>

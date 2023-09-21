@@ -1,17 +1,7 @@
 package halonen.bookstore.domain;
 
 import halonen.bookstore.service.LoanStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -137,6 +127,7 @@ public class Book {
     public void setStatus(LoanStatus status) {
         this.status = status;
     }
+
     @Override
     public String toString() {
         return "Book [id=" + id + ", title=" + title + ", author=" + author + ", publicationYear=" + publicationYear

@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" lang="en"
-	data-bs-theme="dark">
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      data-bs-theme="dark">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
-	<title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <title>Login</title>
 </head>
 
 <body>
-	<div class="container">
-		<div class="alert alert-danger" th:if="${param.error}">
-			Invalid username and password.
-		</div>
-		<div class="alert alert-warning" th:if="${param.logout}">
-			You have been logged out.
-		</div>
-		<div class="alert alert-success" th:if="${param.registered}">
-			Registered successfully.<br>
-			Admin approval is still needed, for you to use the application.
-		</div>
-		<form th:action="@{/login}" method="post">
-			<div><label> User Name : <input type="text" name="username" class="form-control" /> </label></div>
-			<div><label> Password: <input type="password" name="password" class="form-control" /> </label></div>
-			<div><input type="submit" value="Sign In" class="btn btn-primary" /></div>
-		</form>
-		<a th:href="@{/signup}">Sign-up</a>
-	</div>
+<div class="container">
+    <div class="alert alert-danger" th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div class="alert alert-warning" th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <div class="alert alert-success" th:if="${param.registered}">
+        Registered successfully.<br>
+        Admin approval is still needed, for you to use the application.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div><label> User Name : <input type="text" name="username" class="form-control"/> </label></div>
+        <div><label> Password: <input type="password" name="password" class="form-control"/> </label></div>
+        <div><input type="submit" value="Sign In" class="btn btn-primary"/></div>
+    </form>
+    <a th:href="@{/signup}">Sign-up</a>
+</div>
 </body>
 
 </html>

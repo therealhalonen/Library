@@ -1,19 +1,13 @@
 package halonen.bookstore.web;
 
+import halonen.bookstore.domain.*;
+import halonen.bookstore.service.LoanStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import halonen.bookstore.domain.Book;
-import halonen.bookstore.domain.BookRepository;
-import halonen.bookstore.domain.Loan;
-import halonen.bookstore.domain.LoanRepository;
-import halonen.bookstore.domain.User;
-import halonen.bookstore.domain.UserRepository;
-import halonen.bookstore.service.LoanStatus;
 
 @Controller
 public class LoanController {
@@ -58,12 +52,12 @@ public class LoanController {
             // Check if the book is loaned by the current user
             // if (book.getStatus() == LoanStatus.LOANED && book.getLoan().getUser().getUsername().equals(user.getUsername())) {
 
-                Loan loan = book.getLoan();
+            Loan loan = book.getLoan();
 
-                // Update the book status to AVAILABLE, and delete the Loan from the table
-                book.setStatus(LoanStatus.AVAILABLE);
-                bookRepository.save(book);
-                loanRepository.delete(loan);
+            // Update the book status to AVAILABLE, and delete the Loan from the table
+            book.setStatus(LoanStatus.AVAILABLE);
+            bookRepository.save(book);
+            loanRepository.delete(loan);
             // }
         }
 
