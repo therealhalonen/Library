@@ -1,6 +1,5 @@
 package halonen.bookstore;
 
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.jayway.jsonpath.JsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -77,11 +78,11 @@ public class BookStoreRestControllerTests {
                 + "\"publicationYear\": 2023,"
                 + "\"isbn\": \"9876543210987\","
                 + "\"price\": 200.0,"
-                + "\"category\": {\"categoryid\": 2}}") 
+                + "\"category\": {\"categoryid\": 2}}")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Book Title")) 
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Updated Book Title"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.author").value("Updated Author"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.publicationYear").value(2023))
             .andExpect(MockMvcResultMatchers.jsonPath("$.isbn").value("9876543210987"))

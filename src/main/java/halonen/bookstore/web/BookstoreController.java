@@ -1,6 +1,5 @@
 package halonen.bookstore.web;
 
-import java.lang.annotation.Repeatable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,7 @@ public class BookstoreController {
 	private UserRepository userRepository;
 	@Autowired
 	private LoanRepository loanRepository;
-	
+
 	// Login stuffz
 	@GetMapping("/login")
 	public String login() {
@@ -130,7 +129,7 @@ public class BookstoreController {
 	// Save Book
 	@PostMapping(value = "/save")
 	public String saveBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, Model model) {
-		
+
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("category", new Category());
 		    model.addAttribute("book", book);

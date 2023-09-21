@@ -33,20 +33,21 @@ public class MySecurityConfig {
     @Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    @Bean
+    @SuppressWarnings("removal")
+	@Bean
     @Order(1)
     SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().hasRole("ADMIN");;
+                    auth.anyRequest().hasRole("ADMIN");
                 })
                 .httpBasic()
                 .and()
                 .csrf().disable()
                 .build();
     }
-    
+
     @Bean
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

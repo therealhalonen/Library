@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import halonen.bookstore.domain.Book;
 import halonen.bookstore.domain.BookRepository;
@@ -16,12 +15,10 @@ import halonen.bookstore.domain.User;
 import halonen.bookstore.domain.UserRepository;
 import halonen.bookstore.service.LoanStatus;
 
-import java.util.Date;
-
 @Controller
 public class LoanController {
-	
-	
+
+
     @Autowired
     private LoanRepository loanRepository;
 
@@ -30,7 +27,7 @@ public class LoanController {
 
     @Autowired
     private BookRepository bookRepository;
-    
+
     @PostMapping("/loan/{bookId}")
     public String loanBook(@PathVariable("bookId") Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         // Retrieve the book and user
@@ -50,7 +47,7 @@ public class LoanController {
 
         return "redirect:/booklist";
     }
-    
+
     @PostMapping("/return/{bookId}")
     public String returnBook(@PathVariable("bookId") Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         // Retrieve the book and user
@@ -62,7 +59,7 @@ public class LoanController {
             // if (book.getStatus() == LoanStatus.LOANED && book.getLoan().getUser().getUsername().equals(user.getUsername())) {
 
                 Loan loan = book.getLoan();
-                
+
                 // Update the book status to AVAILABLE, and delete the Loan from the table
                 book.setStatus(LoanStatus.AVAILABLE);
                 bookRepository.save(book);

@@ -53,7 +53,7 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
-    
+
     public Book() {
     }
 
@@ -129,7 +129,7 @@ public class Book {
     public void setLoan(Loan loan) {
         this.loan = loan;
     }
-    
+
     public LoanStatus getStatus() {
         return status;
     }

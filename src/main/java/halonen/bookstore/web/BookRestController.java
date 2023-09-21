@@ -28,7 +28,7 @@ public class BookRestController {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	// Get All Books
 	@GetMapping("/books")
 	public ResponseEntity<List<Book>> bookListRest() {
@@ -40,7 +40,7 @@ public class BookRestController {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-	
+
 	// Get One Book
 	@GetMapping("/books/{id}")
 	public ResponseEntity<Book> getBookById(@PathVariable("id") Long bookId) {
@@ -55,7 +55,7 @@ public class BookRestController {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-	
+
 	// Add New Book
 	@PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book newBook) {
@@ -67,7 +67,7 @@ public class BookRestController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-	
+
 	// Delete Book
     @DeleteMapping("/books/{id}")
     public ResponseEntity<Void> deleteBookById(@PathVariable("id") Long bookId) {
@@ -102,7 +102,7 @@ public class BookRestController {
                 existingBook.setIsbn(updatedBook.getIsbn());
                 existingBook.setPrice(updatedBook.getPrice());
                 existingBook.setCategory(updatedBook.getCategory());
-    
+
 
                 // Save the updated book to the repository
                 Book savedBook = bookRepository.save(existingBook);

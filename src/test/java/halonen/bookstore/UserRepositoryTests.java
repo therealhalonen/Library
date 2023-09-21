@@ -1,16 +1,15 @@
 package halonen.bookstore;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import halonen.bookstore.domain.User;
-import halonen.bookstore.domain.UserRepository;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import halonen.bookstore.domain.User;
+import halonen.bookstore.domain.UserRepository;
 
 @DataJpaTest
 public class UserRepositoryTests {
