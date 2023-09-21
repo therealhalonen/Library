@@ -21,7 +21,7 @@
 		<label for="author">Author:</label><br>
 		<input type="text" id="author" th:field="*{author}" required><br>
 		<label for="publicationYear">Publication Year:</label><br>
-		<input type="number" id="publicationYear" required name="publicationYear" value="0">
+		<input type="number" id="publicationYear" required name="publicationYear" value="0"><br>
 		<span th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}"></span>
 		<label for="isbn">ISBN:</label><br>
 		<input type="text" id="isbn" th:field="*{isbn}" required><br>

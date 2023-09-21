@@ -92,7 +92,7 @@
 							th:if="${book.loan != null && book.loan.user.username == #authentication.name}">Return</button>
 					</form>
 					<!-- Admin can mark the book as returned -->
-					<form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
+					<form sec:authorize="hasRole('ADMIN')" th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
 						<button type="submit" class="btn btn-primary"
 							th:if="${book.loan != null && book.loan.user.username != #authentication.name}">Mark as Returned</button>
 					</form>

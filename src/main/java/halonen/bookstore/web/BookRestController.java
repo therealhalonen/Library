@@ -86,7 +86,6 @@ public class BookRestController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    // Update Existing Book
     @PutMapping("/books/{id}")
     public ResponseEntity<Book> updateBook(
             @PathVariable("id") Long bookId,
@@ -99,9 +98,11 @@ public class BookRestController {
                 // Update the properties of the existing book with the new values
                 existingBook.setTitle(updatedBook.getTitle());
                 existingBook.setAuthor(updatedBook.getAuthor());
+                existingBook.setPublicationYear(updatedBook.getPublicationYear());
                 existingBook.setIsbn(updatedBook.getIsbn());
                 existingBook.setPrice(updatedBook.getPrice());
                 existingBook.setCategory(updatedBook.getCategory());
+    
 
                 // Save the updated book to the repository
                 Book savedBook = bookRepository.save(existingBook);
@@ -110,9 +111,11 @@ public class BookRestController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
+            e.printStackTrace(); // Print the exception for debugging
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // CRUD operations for Categories
     @GetMapping("/categories")
