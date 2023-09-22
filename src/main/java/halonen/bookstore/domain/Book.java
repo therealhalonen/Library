@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class Book {
 
@@ -43,6 +46,15 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
+
+    @OneToMany(mappedBy = "book")
+    private final Set<BookLike> likes = new HashSet<>();
+
+    @Transient
+    private boolean userHasLiked;
+
+    @ManyToMany(mappedBy = "likedBooks")
+    private Set<User> likedUsers = new HashSet<>();
 
     public Book() {
     }
@@ -126,6 +138,30 @@ public class Book {
 
     public void setStatus(LoanStatus status) {
         this.status = status;
+    }
+
+    public boolean isUserHasLiked() {
+        return userHasLiked;
+    }
+
+    public void setUserHasLiked(boolean userHasLiked) {
+        this.userHasLiked = userHasLiked;
+    }
+
+    public boolean bookHasLikes() {
+        return !likes.isEmpty();
+    }
+
+    public Set<BookLike> getLikes() {
+        return likes;
+    }
+
+    public Set<User> getLikedUsers() {
+        return likedUsers;
+    }
+
+    public void setLikedUsers(Set<User> likedUsers) {
+        this.likedUsers = likedUsers;
     }
 
     @Override

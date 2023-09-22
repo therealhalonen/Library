@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" lang="en"
+      data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <title>Liked Books</title>
+</head>
+
+<body>
+<h1>Liked Books</h1>
+
+<form th:action="@{/likedbooks}" method="get" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+    <label for="sortField">Sort By:</label>
+    <select id="sortField" name="sortField">
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+        <option value="isbn">ISBN</option>
+        <option value="price">Price</option>
+        <option value="category">Category</option>
+    </select>
+
+    <label for="sortDirection">Sort Direction:</label>
+    <select id="sortDirection" name="sortDirection">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+
+    <button type="submit">Sort</button>
+</form>
+
+<table class="table table-striped">
+
+    <tr>
+        <th sec:authorize="hasRole('ADMIN')">ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publication Year</th>
+        <th>ISBN</th>
+        <th>Price</th>
+        <th>Category</th>
+
+    <tr th:each="likedBook : ${likedBooks}">
+        <td sec:authorize="hasRole('ADMIN')" th:text="${likedBook.id}"></td>
+        <td th:text="${likedBook.title}"></td>
+        <td th:text="${likedBook.author}"></td>
+        <td th:text="${likedBook.publicationYear}"></td>
+        <td th:text="${likedBook.isbn}"></td>
+        <td th:text="${likedBook.price}"></td>
+        <td th:text="${likedBook.category != null ? likedBook.category.name : 'N/A'}"></td>
+    </tr>
+</table>
+
+<a href="javascript:history.back()">Go Back</a><br>
+<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
+
+</body>
+
+</html>

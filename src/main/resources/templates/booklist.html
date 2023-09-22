@@ -1,116 +1,146 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6" lang="en"
-      data-bs-theme="dark">
+	data-bs-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
-    <title>Booklist</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<title>Booklist</title>
 </head>
 
 <body>
-<a class="btn btn-primary" th:if="${previousPage}" th:href="${previousPage}">Back</a>
+	<a class="btn btn-primary" th:if="${previousPage}" th:href="${previousPage}">Back</a>
 
-<h1>Books</h1>
-<div class="col-md-4">
-    <i>Welcome <b sec:authentication="name"></b>,
-        your role is
-        <b sec:authorize="hasRole('USER')" th:text="${'USER'}"></b>
-        <b sec:authorize="hasRole('ADMIN')"> <a th:href="@{/admin}">ADMIN</a></b>
-        <b sec:authorize="hasRole('TEMP')">to be reviewed</b>
-    </i>
-</div>
+	<h1>Books</h1>
+	<div class="col-md-4">
+		<i>Welcome <b sec:authentication="name"></b>,
+			your role is
+			<b sec:authorize="hasRole('USER')" th:text="${'USER'}"></b>
+			<b sec:authorize="hasRole('ADMIN')"> <a th:href="@{/admin}">ADMIN</a></b>
+			<b sec:authorize="hasRole('TEMP')">to be reviewed</b>
+		</i>
+	</div>
 
-<!-- Check if the user has the TEMP role -->
-<div sec:authorize="hasRole('TEMP')">
-    <p><b>Please wait for Admin approval to proceed.</b></p>
-</div>
-<form th:action="@{/booklist}" method="get" sec:authorize="hasAnyRole('ADMIN', 'USER')">
-    <label for="sortField">Sort By:</label>
-    <select id="sortField" name="sortField">
-        <option value="title">Title</option>
-        <option value="author">Author</option>
-        <option value="isbn">ISBN</option>
-        <option value="price">Price</option>
-        <option value="category">Category</option>
-    </select>
+	<!-- Check if the user has the TEMP role -->
+	<div sec:authorize="hasRole('TEMP')">
+		<p><b>Please wait for Admin approval to proceed.</b></p>
+	</div>
+	<form th:action="@{/booklist}" method="get" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+		<label for="sortField">Sort By:</label>
+		<select id="sortField" name="sortField">
+			<option value="title">Title</option>
+			<option value="author">Author</option>
+			<option value="isbn">ISBN</option>
+			<option value="price">Price</option>
+			<option value="category">Category</option>
+		</select>
 
-    <label for="sortDirection">Sort Direction:</label>
-    <select id="sortDirection" name="sortDirection">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-    </select>
+		<label for="sortDirection">Sort Direction:</label>
+		<select id="sortDirection" name="sortDirection">
+			<option value="asc">Ascending</option>
+			<option value="desc">Descending</option>
+		</select>
 
-    <button type="submit">Sort</button>
-</form>
+		<button type="submit">Sort</button>
+	</form>
 
-<!-- Check if the user has roles USER or ADMIN -->
-<table class="table table-striped" sec:authorize="hasAnyRole('ADMIN', 'USER')">
+	<!-- Check if the user has roles USER or ADMIN -->
+	<table class="table table-striped" sec:authorize="hasAnyRole('ADMIN', 'USER')">
 
-    <tr>
-        <th sec:authorize="hasRole('ADMIN')">ID</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publication Year</th>
-        <th>ISBN</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Status</th>
-        <th>Loaned By</th>
-    <tr th:each="book : ${books}">
-        <td sec:authorize="hasRole('ADMIN')" th:text="${book.id}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publicationYear}"></td>
-        <td th:text="${book.isbn}"></td>
-        <td th:text="${book.price}"></td>
-        <td th:text="${book.category != null ? book.category.name : 'N/A'}"></td>
-        <td th:text="${book.status}"></td>
-        <td>
-            <!-- Check if the book is loaned by the current user -->
-            <span th:if="${book.loan != null && book.loan.user.username == #authentication.name}"
-                  th:text="${'You'}"></span>
-            <!-- Otherwise, display the username of the user who loaned the book -->
-            <span sec:authorize="hasRole('ADMIN')" th:if="${book.loan != null && book.loan.user.username != #authentication.name}"
-                  th:text="${book.loan.user.username}"></span>
-        </td>
-        <td>
-            <div class="btn-group">
-                <form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
-                      th:action="@{/edit/{id}(id=${book.id})}" method="get">
-                    <button type="submit" class="btn btn-success">Edit</button>
-                </form>
-                <form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
-                      th:action="@{/delete/{id}(id=${book.id})}" method="get"
-                      onsubmit="return confirm('Are you sure you want to delete this book?');">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-                <form th:action="@{/loan/{bookId}(bookId=${book.id})}" method="post">
-                    <button type="submit" class="btn btn-primary" th:if="${book.loan == null}">Loan</button>
-                </form>
-                <form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
-                    <button type="submit" class="btn btn-primary"
-                            th:if="${book.loan != null && book.loan.user.username == #authentication.name}">Return
-                    </button>
-                </form>
-                <!-- Admin can mark the book as returned -->
-                <form sec:authorize="hasRole('ADMIN')" th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
-                    <button type="submit" class="btn btn-primary"
-                            th:if="${book.loan != null && book.loan.user.username != #authentication.name}">Mark as
-                        Returned
-                    </button>
-                </form>
-            </div>
-        </td>
-    </tr>
-</table>
+		<tr>
+			<th sec:authorize="hasRole('ADMIN')">ID</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Publication Year</th>
+			<th>ISBN</th>
+			<th>Price</th>
+			<th>Category</th>
+			<th>Status</th>
+			<th>Loaned By</th>
+			<th>Likes</th>
+			<th>Users who liked this book:</th>
+		<tr th:each="book : ${books}">
+			<td sec:authorize="hasRole('ADMIN')" th:text="${book.id}"></td>
+			<td th:text="${book.title}"></td>
+			<td th:text="${book.author}"></td>
+			<td th:text="${book.publicationYear}"></td>
+			<td th:text="${book.isbn}"></td>
+			<td th:text="${book.price}"></td>
+			<td th:text="${book.category != null ? book.category.name : 'N/A'}"></td>
+			<td th:text="${book.status}"></td>
+			<td>
+				<!-- Check if the book is loaned by the current user -->
+				<span th:if="${book.loan != null && book.loan.user.username == #authentication.name}"
+					th:text="${'You'}"></span>
+				<!-- Otherwise, display the username of the user who loaned the book -->
+				<span sec:authorize="hasRole('ADMIN')"
+					th:if="${book.loan != null && book.loan.user.username != #authentication.name}"
+					th:text="${book.loan.user.username}"></span>
+			</td>
+			<td>
+				<!-- Check if the book has likes -->
+				<span th:if="${book.bookHasLikes}">Liked</span>
+				<span th:unless="${book.bookHasLikes}">Not Liked</span>
+			</td>
+			<td>
+				<ul>
+					<li th:each="user : ${book.likedUsers}" th:text="${user.username}"></li>
+				</ul>
 
-<!-- Check if the user has the ADMIN role -->
-<a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/add}">Add New Book</a>
-<a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/addcategory}">Edit Categories</a><br><br>
+			</td>
+			<td>
+				<div class="btn-group">
+					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+						th:action="@{/edit/{id}(id=${book.id})}" method="get">
+						<button type="submit" class="btn btn-success">Edit</button>
+					</form>
+					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+						th:action="@{/delete/{id}(id=${book.id})}" method="get"
+						onsubmit="return confirm('Are you sure you want to delete this book?');">
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+					<form th:action="@{/loan/{bookId}(bookId=${book.id})}" method="post">
+						<button type="submit" class="btn btn-primary" th:if="${book.loan == null}">Loan</button>
+					</form>
+					<form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
+						<button type="submit" class="btn btn-primary"
+							th:if="${book.loan != null && book.loan.user.username == #authentication.name}">Return
+						</button>
+					</form>
+					<!-- Admin can mark the book as returned -->
+					<form sec:authorize="hasRole('ADMIN')" th:action="@{/return/{bookId}(bookId=${book.id})}"
+						method="post">
+						<button type="submit" class="btn btn-primary"
+							th:if="${book.loan != null && book.loan.user.username != #authentication.name}">Mark as
+							Returned
+						</button>
+					</form>
 
-<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
+					<!-- Check if the current user has liked the book -->
+					<th:block th:if="${book.userHasLiked}">
+						<!-- Show the "Unlike" button -->
+						<form th:action="@{/unlike/{bookId}(bookId=${book.id})}" method="post">
+							<button type="submit">Unlike</button>
+						</form>
+					</th:block>
+					<th:block th:unless="${book.userHasLiked}">
+						<!-- Show the "Like" button -->
+						<form th:action="@{/like/{bookId}(bookId=${book.id})}" method="post">
+							<button type="submit">Like</button>
+						</form>
+					</th:block>
+
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<!-- Check if the user has the ADMIN role -->
+	<a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/add}">Add New Book</a>
+	<a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/addcategory}">Edit Categories</a><br><br>
+
+	<a class="btn btn-danger" th:href="@{/custom-logout}">Log Out</a>
 
 </body>
 

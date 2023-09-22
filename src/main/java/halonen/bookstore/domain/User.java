@@ -2,6 +2,9 @@ package halonen.bookstore.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity(name = "users")
 public class User {
     @Id
@@ -9,7 +12,6 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    // Username with unique constraint
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -18,6 +20,12 @@ public class User {
 
     @Column(name = "role", nullable = false)
     private String role;
+
+    @ManyToMany
+    @JoinTable(name = "book_like",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Book> likedBooks = new HashSet<>();
 
     public User() {
     }
@@ -61,4 +69,20 @@ public class User {
         this.role = role;
     }
 
+    // Getter method for likedBooks
+    public Set<Book> getLikedBooks() {
+        return likedBooks;
+    }
+
+    // Method to add a like
+    public void addLikedBook(Book book) {
+        likedBooks.add(book);
+        book.getLikedUsers().add(this);
+    }
+
+    // Method to remove a like
+    public void removeLikedBook(Book book) {
+        likedBooks.remove(book);
+        book.getLikedUsers().remove(this);
+    }
 }

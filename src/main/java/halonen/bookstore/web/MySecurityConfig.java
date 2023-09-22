@@ -62,6 +62,9 @@ public class MySecurityConfig {
                         // Users and Admins
                         .requestMatchers(
                                 antMatcher("/loan/**"),
+                                antMatcher("/likedbooks"),
+                                antMatcher("/unlike/**"),
+
                                 antMatcher("/booklist"))
                         .hasAnyRole("USER", "ADMIN")
                         // Admin only
