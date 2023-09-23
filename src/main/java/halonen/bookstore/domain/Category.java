@@ -1,50 +1,58 @@
 package halonen.bookstore.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryid;
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long categoryid;
+	private String name;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Book> books;
+	@JsonIgnore
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+	private List<Book> books;
 
-    public Category() {
-    }
+	public Category() {
+	}
 
-    public Category(String name) {
-        super();
-        this.name = name;
-    }
+	public Category(String name) {
+		super();
+		this.name = name;
+	}
 
-    public Long getCategoryid() {
-        return categoryid;
-    }
+	// Constructors
+	
+	public Long getCategoryid() {
+		return categoryid;
+	}
 
-    public void setCategoryid(Long categoryid) {
-        this.categoryid = categoryid;
-    }
+	public void setCategoryid(Long categoryid) {
+		this.categoryid = categoryid;
+	}
 
-    public List<Book> getBooks() {
-        return books;
-    }
+	public List<Book> getBooks() {
+		return books;
+	}
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 }

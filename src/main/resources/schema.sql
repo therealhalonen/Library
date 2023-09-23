@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS category_seq;
 DROP TABLE IF EXISTS book_seq;
-DROP TABLE IF EXISTS user_book_like;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add Categories table

@@ -1,8 +1,5 @@
 package halonen.bookstore.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,31 +7,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity
-public class Loan {
+@Entity(name = "book_like")
+public class Like {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long loanId;
+	private Long id;
 
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "userid")
+	@JoinColumn(name = "user_id")
 	private User user;
 
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "bookid")
+	@JoinColumn(name = "book_id")
 	private Book book;
-	
+
 	// Constructors
-	
-	public Long getLoanId() {
-		return loanId;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setLoanId(Long loanId) {
-		this.loanId = loanId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public User getUser() {

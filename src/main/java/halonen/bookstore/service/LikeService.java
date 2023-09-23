@@ -1,15 +1,15 @@
 package halonen.bookstore.service;
 
-import halonen.bookstore.domain.Book;
-import halonen.bookstore.domain.BookLike;
-import halonen.bookstore.domain.LikeRepository;
-import halonen.bookstore.domain.User;
-import jakarta.transaction.Transactional;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import halonen.bookstore.domain.Book;
+import halonen.bookstore.domain.Like;
+import halonen.bookstore.domain.LikeRepository;
+import halonen.bookstore.domain.User;
+import jakarta.transaction.Transactional;
 
 @Service
 public class LikeService {
@@ -22,7 +22,7 @@ public class LikeService {
 
 	@Transactional
 	public boolean userHasLikedBook(Book book, String username) {
-		List<BookLike> likes = likeRepository.findByUser_UsernameAndBook_Id(username, book.getId());
+		List<Like> likes = likeRepository.findByUser_UsernameAndBook_Id(username, book.getId());
 		return !likes.isEmpty();
 	}
 
