@@ -1,12 +1,14 @@
 -- Start from scratch
+DROP DATABASE IF EXISTS library_db;
+CREATE DATABASE library_db;
+USE library_db;
+
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS loan;
+DROP TABLE IF EXISTS borrow;
 DROP TABLE IF EXISTS book_like;
 DROP TABLE IF EXISTS book;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS category_seq;
-DROP TABLE IF EXISTS book_seq;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add Categories table
@@ -39,8 +41,8 @@ CREATE TABLE users
     role     VARCHAR(255) NOT NULL
 );
 
--- Add Loan table
-CREATE TABLE loan
+-- Add Borrow table
+CREATE TABLE borrow
 (
     id     INT AUTO_INCREMENT PRIMARY KEY,
     userid INT,
@@ -59,30 +61,7 @@ CREATE TABLE book_like
     FOREIGN KEY (book_id) REFERENCES book (id)
 );
 
--- Add sequences
-CREATE
-SEQUENCE book_seq START
-WITH 4 INCREMENT BY 1;
-CREATE
-SEQUENCE category_seq START
-WITH 4 INCREMENT BY 1;
-
--- Add Categories
-INSERT INTO category (name)
-VALUES ('Category 1');
-INSERT INTO category (name)
-VALUES ('Category 2');
-INSERT INTO category (name)
-VALUES ('Category 3');
-
--- Add some Books
-INSERT INTO book (title, author, publication_year, isbn, price, categoryid)
-VALUES ('Book 1', 'Author 1', 2000, 'ISBN-1111', 10.99, 1);
-
-INSERT INTO book (title, author, publication_year, isbn, price, categoryid)
-VALUES ('Book 2', 'Author 2', 2010, 'ISBN-2222', 15.99, 2);
-
--- Add the Admin user
+-- Add the Admin users
 INSERT INTO users (username, password, role)
 VALUES ('admin', '$2b$10$o0liCdP9lzTgCHarj9JCdeoyWICDjRpQCYS4TP97jSnRc5tlriKPS', 'ADMIN');
 INSERT INTO users (username, password, role)

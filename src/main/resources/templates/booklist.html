@@ -57,7 +57,7 @@
 			<th>Price</th>
 			<th>Category</th>
 			<th>Status</th>
-			<th>Loaned By</th>
+			<th>Borrowed By</th>
 			<th>Likes</th>
 			<th>Users who liked this book:</th>
 		<tr th:each="book : ${books}">
@@ -70,13 +70,13 @@
 			<td th:text="${book.category != null ? book.category.name : 'N/A'}"></td>
 			<td th:text="${book.status}"></td>
 			<td>
-				<!-- Check if the book is loaned by the current user -->
-				<span th:if="${book.loan != null && book.loan.user.username == #authentication.name}"
+				<!-- Check if the book is borrowed by the current user -->
+				<span th:if="${book.borrow != null && book.borrow.user.username == #authentication.name}"
 					th:text="${'You'}"></span>
-				<!-- Otherwise, display the username of the user who loaned the book -->
+				<!-- Otherwise, display the username of the user who borrowed the book -->
 				<span sec:authorize="hasRole('ADMIN')"
-					th:if="${book.loan != null && book.loan.user.username != #authentication.name}"
-					th:text="${book.loan.user.username}"></span>
+					th:if="${book.borrow != null && book.borrow.user.username != #authentication.name}"
+					th:text="${book.borrow.user.username}"></span>
 			</td>
 			<td>
 				<!-- Check if the book has likes -->
@@ -91,28 +91,28 @@
 			</td>
 			<td>
 				<div class="btn-group">
-					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+					<form th:if="${book.borrow == null}" sec:authorize="hasRole('ADMIN')"
 						th:action="@{/edit/{id}(id=${book.id})}" method="get">
 						<button type="submit" class="btn btn-success">Edit</button>
 					</form>
-					<form th:if="${book.loan == null}" sec:authorize="hasRole('ADMIN')"
+					<form th:if="${book.borrow == null}" sec:authorize="hasRole('ADMIN')"
 						th:action="@{/delete/{id}(id=${book.id})}" method="get"
 						onsubmit="return confirm('Are you sure you want to delete this book?');">
 						<button type="submit" class="btn btn-danger">Delete</button>
 					</form>
-					<form th:action="@{/loan/{bookId}(bookId=${book.id})}" method="post">
-						<button type="submit" class="btn btn-primary" th:if="${book.loan == null}">Loan</button>
+					<form th:action="@{/borrow/{bookId}(bookId=${book.id})}" method="post">
+						<button type="submit" class="btn btn-primary" th:if="${book.borrow == null}">borrow</button>
 					</form>
 					<form th:action="@{/return/{bookId}(bookId=${book.id})}" method="post">
 						<button type="submit" class="btn btn-primary"
-							th:if="${book.loan != null && book.loan.user.username == #authentication.name}">Return
+							th:if="${book.borrow != null && book.borrow.user.username == #authentication.name}">Return
 						</button>
 					</form>
 					<!-- Admin can mark the book as returned -->
 					<form sec:authorize="hasRole('ADMIN')" th:action="@{/return/{bookId}(bookId=${book.id})}"
 						method="post">
 						<button type="submit" class="btn btn-primary"
-							th:if="${book.loan != null && book.loan.user.username != #authentication.name}">Mark as
+							th:if="${book.borrow != null && book.borrow.user.username != #authentication.name}">Mark as
 							Returned
 						</button>
 					</form>
