@@ -48,9 +48,9 @@ The application features the following functionalities:
 - Books can be deleted even if they have "likes"
 - JUnit testing. (Uses separate properties and schema = separate database to not interfere with the production one)
 
-**REST:
-- API endpoint is accessedonly by admin and contains highly experimental/deprecated methods, for example http basic authentication and disabling cross site request forgery.
-	- This was done due to limited skills and schedule.**
+**REST:**  
+**- API endpoint is accessed only by admin and contains highly experimental/deprecated methods, for example http basic authentication and disabling cross site request forgery.**   
+**- This was done due to limited skills and schedule.**
 
 The UI and the code:
 
