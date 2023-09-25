@@ -7,7 +7,7 @@ Made using:
 - Java version 17.0.8
 - MariaDB (Ver 15.1 Distrib 10.11.3-MariaDB, for debian-linux-gnu (x86_64) using  EditLine wrapper)
 
-![screenshot](./screenshot.png)
+[Screenshots](screenshots/)
 
 The application uses MariaDB, which was running on localhost, when tested.    
 Relationships:
