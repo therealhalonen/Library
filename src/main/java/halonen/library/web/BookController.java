@@ -58,10 +58,10 @@ public class BookController {
 	@GetMapping(value = { "/", "/booklist" })
 	public String bookList(Model model, @RequestParam(value = "sortField", defaultValue = "title") String sortField,
 			@RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection, Principal principal) {
-		List<Book> books = (List<Book>) bookRepository.findAll();
 		Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 		Sort sort = Sort.by(direction, sortField);
-
+		List<Book> books = bookRepository.findAll(sort);;
+		
 		for (Book book : books) {
 			// Check if the book has any likes
 			boolean bookHasLikes = !book.getLikes().isEmpty();
