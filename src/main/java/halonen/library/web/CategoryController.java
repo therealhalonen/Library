@@ -39,6 +39,7 @@ public class CategoryController {
 	private LikeService likeService;
 
 	// Create Category
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/addcategory")
 	public String addCategory(Model model) {
 		model.addAttribute("category", new Category());
@@ -55,6 +56,7 @@ public class CategoryController {
 	}
 
 	// Save Category Simple
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PostMapping(value = "/savecategorysimple")
 	public String saveCategorySimple(Category category) {
 		categoryRepository.save(category);
@@ -62,6 +64,7 @@ public class CategoryController {
 	}
 
 	// Save Category using AJAX
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PostMapping(value = "/savecategory", produces = "application/json")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> saveCategory(@RequestBody Category category) {

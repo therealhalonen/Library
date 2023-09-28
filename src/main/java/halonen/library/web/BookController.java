@@ -95,6 +95,7 @@ public class BookController {
 	}
 	
 	// Create Book
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/add")
 	public String addBook(Model model) {
 		model.addAttribute("book", new Book());
@@ -103,6 +104,7 @@ public class BookController {
 		return "addbook";
 	}
 	// Update Book
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/edit/{id}")
 	public String editBook(@PathVariable("id") Long bookId, Model model) {
 		model.addAttribute("book", bookRepository.findById(bookId));

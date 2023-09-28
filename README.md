@@ -139,3 +139,5 @@ Database address and password are/were stored in IDE:s environment variable.
 - Assign environment variables or edit application.properties for both main and testing.
 - Use schema.sql to setup the database
 - Update dependencies and run!
+
+Note: login:password admin:admin or admin2:admin

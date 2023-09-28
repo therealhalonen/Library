@@ -34,6 +34,8 @@ public class MySecurityConfig {
 	@Autowired
 	private AuthenticationSuccessHandler authenticationSuccessHandler;
 
+	// PURELY FOR TESTING PURPOSES!
+	// As the course was a basic course. I disabled the csrf and enabled a httpBasic authorization for api endpoints.
 	@SuppressWarnings("removal")
 	@Bean
 	@Order(1)
@@ -50,16 +52,18 @@ public class MySecurityConfig {
 				.requestMatchers(antMatcher("/css/**"), antMatcher("/login"), antMatcher("/signup"),
 						antMatcher("/saveuser"))
 				.permitAll()
+				
 				// Users and Admins
 				.requestMatchers(antMatcher("/loan/**"), antMatcher("/likedbooks"), antMatcher("/unlike/**"),
-
 						antMatcher("/booklist"))
 				.hasAnyRole("USER", "ADMIN")
+				
 				// Admin only
 				.requestMatchers(antMatcher("/js/**"), antMatcher("/add"), antMatcher("/addcategory"),
 						antMatcher("/delete/**"), antMatcher("/edit/**"), antMatcher("/savecategory"),
 						antMatcher("/deletecategory/**"))
 				.hasRole("ADMIN")
+				
 				// Temp user
 				.requestMatchers(antMatcher("/approval")).hasRole("TEMP").anyRequest().authenticated()
 

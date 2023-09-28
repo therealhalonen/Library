@@ -3,6 +3,8 @@ package halonen.library.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import halonen.library.service.BookStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -50,23 +52,26 @@ public class Book {
 	@NotNull
 	@Column(name = "price")
 	private double price;
-
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "categoryid")
 	private Category category;
-
+	
+	@JsonIgnore
 	@OneToOne(mappedBy = "book")
 	private Borrow borrow;
 
 	@Enumerated(EnumType.STRING)
 	private BookStatus status;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
 	private final Set<Like> likes = new HashSet<>();
 
 	@Transient
 	private boolean userHasLiked;
-
+	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "likedBooks")
 	private Set<User> likedUsers = new HashSet<>();
 
