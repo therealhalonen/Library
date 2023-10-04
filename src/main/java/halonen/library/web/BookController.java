@@ -47,7 +47,7 @@ public class BookController {
 	public String login() {
 		return "login";
 	}
-	
+
 	// Approval page for newly registered user
 	@GetMapping("/approval")
 	public String approvalPage() {
@@ -60,8 +60,8 @@ public class BookController {
 			@RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection, Principal principal) {
 		Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 		Sort sort = Sort.by(direction, sortField);
-		List<Book> books = bookRepository.findAll(sort);;
-		
+		List<Book> books = bookRepository.findAll(sort);
+
 		for (Book book : books) {
 			// Check if the book has any likes
 			boolean bookHasLikes = !book.getLikes().isEmpty();
@@ -93,7 +93,7 @@ public class BookController {
 		// Redirect to the /booklist page with sorting parameters
 		return "redirect:/booklist?sortField=" + field + "&sortDirection=" + direction;
 	}
-	
+
 	// Create Book
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/add")
@@ -103,6 +103,7 @@ public class BookController {
 		model.addAttribute("categories", categoryRepository.findAll());
 		return "addbook";
 	}
+
 	// Update Book
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping(value = "/edit/{id}")
